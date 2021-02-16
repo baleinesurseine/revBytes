@@ -16,20 +16,6 @@ unsigned int lookuptable[256] = {R6(0), R6(2), R6(1), R6(3)};
 #define LEN 81
 
 
-char* errorMessage(int e) {
-  static char errorMsg[LEN];
-  switch (e) {
-    case EPERM: snprintf(errorMsg, LEN, "Operation not permitted"); break;
-    case ENOENT: snprintf(errorMsg, LEN, "No such file or directory"); break;
-    case EACCES: snprintf(errorMsg, LEN, "Permission denied"); break;
-    case ENOSPC: snprintf(errorMsg, LEN, "No space left on device"); break;
-    case EROFS: snprintf(errorMsg, LEN, "Read-only file system"); break;
-    default: snprintf(errorMsg, LEN, "Unknown error: %u", e) ;
-  }
-  return errorMsg;
-}
-
-
 void printDescription(const char *path)
 {
   char *name;
@@ -70,7 +56,7 @@ int main(int argc, char const *argv[])
   FILE *file = fopen(filename, "rt");
   if (file == NULL)
   {
-    fprintf(stderr, "\033[1mError:\033[22m Could not open input file: %s (%s)\n", filename, errorMessage(errno));
+    fprintf(stderr, "\033[1mError:\033[22m Could not open input file: %s (%s)\n", filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
@@ -80,7 +66,7 @@ int main(int argc, char const *argv[])
     out = fopen(output, "w");
     if (out == NULL)
     {
-      fprintf(stderr, "\033[1mError:\033[22m Could not open output file: %s (%s)\n", output, errorMessage(errno));
+      fprintf(stderr, "\033[1mError:\033[22m Could not open output file: %s (%s)\n", output, strerror(errno));
       exit(EXIT_FAILURE);
     }
     printf("Write to: %s\n", output);
