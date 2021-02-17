@@ -15,13 +15,15 @@ unsigned int lookuptable[256] = {R6(0), R6(2), R6(1), R6(3)};
 
 #define LEN 81
 
+#define BOLD "\033[1m"
+#define NORM "\033[22m"
 
 void printDescription(const char *path)
 {
   char *name;
   // extract filename from path
   (name = strrchr((char *)path, '/')) ? ++name : (name = (char *)path);
-  printf("\n\033[1m%s\033[22m - a small utility to revert bits\n\n", name);
+  printf("\n%s%s%s - a small utility to revert bits\n\n", BOLD, name, NORM);
 }
 
 void printUsage(const char *path)
@@ -29,7 +31,7 @@ void printUsage(const char *path)
   char *name;
   // extract filename from path
   (name = strrchr((char *)path, '/')) ? ++name : (name = (char *)path);
-  printf("\033[1musage:\033[22m  %s inputFile [outputFile]\n\n", name);
+  printf("%susage:%s  %s inputFile [outputFile]\n\n", BOLD, NORM, name);
   printf("%s is a tool to revert bits in a list of 8-bits integer.\nThe data in the input and output files are comma-separated.\n\n", name);
 }
 
@@ -56,7 +58,7 @@ int main(int argc, char const *argv[])
   FILE *file = fopen(filename, "rt");
   if (file == NULL)
   {
-    fprintf(stderr, "\033[1mError:\033[22m Could not open input file: %s (%s)\n", filename, strerror(errno));
+    fprintf(stderr, "%sError:%s Could not open input file: %s (%s)\n", BOLD, NORM, filename, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
@@ -66,7 +68,7 @@ int main(int argc, char const *argv[])
     out = fopen(output, "w");
     if (out == NULL)
     {
-      fprintf(stderr, "\033[1mError:\033[22m Could not open output file: %s (%s)\n", output, strerror(errno));
+      fprintf(stderr, "%sError:%s Could not open output file: %s (%s)\n", BOLD, NORM, output, strerror(errno));
       exit(EXIT_FAILURE);
     }
     printf("Write to: %s\n", output);
