@@ -10,7 +10,7 @@ EXEC := $(BIN_DIR)/$(NAME)
 SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-CC			:= gcc
+CC		:= gcc
 CFLAGS	:= -Wall -O -Werror -Wextra
 LDFLAGS	:=
 LDLIBS	:=
