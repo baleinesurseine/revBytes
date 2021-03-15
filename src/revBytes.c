@@ -1,5 +1,5 @@
 /* 
- * MIT License
+ * GNU GENERAL PUBLIC LICENSE
  *
  * Copyright (c) 2021 Edouard Fischer
  *
