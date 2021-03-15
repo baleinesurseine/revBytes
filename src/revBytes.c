@@ -1,3 +1,10 @@
+/* 
+ * MIT License
+ *
+ * Copyright (c) 2021 Edouard Fischer
+ *
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -54,7 +61,7 @@ int main(int argc, char const *argv[])
   }
 
   const char *filename = argv[1];
-  printf("Read: %s\n", filename);
+  printf("Reading: %s\n", filename);
   FILE *file = fopen(filename, "rt");
   if (file == NULL)
   {
@@ -62,31 +69,37 @@ int main(int argc, char const *argv[])
     exit(EXIT_FAILURE);
   }
 
-  if (argc == 3)
+  if (argc >= 3)
   {
+    if (argc > 3) fprintf(stderr, "Ignoring %d extra arguments", argc - 3);
+    
     const char *output = argv[2];
+    printf("Writing to: %s\n", output);
     out = fopen(output, "w");
     if (out == NULL)
     {
       fprintf(stderr, "%sError:%s Could not open output file: %s (%s)\n", BOLD, NORM, output, strerror(errno));
       exit(EXIT_FAILURE);
     }
-    printf("Write to: %s\n", output);
   }
 
   char line[LEN];
   const char *sep = ",";
   char *end;
 
+  // scan file line by line
   while (fgets(line, LEN, file) != NULL)
   {
+    // find comma separated tokens
     char *tok = strtok(line, sep);
     while (tok != NULL)
     {
+      // convert sring token to unsigned long
       int res = strtoul(tok, &end, 10);
       if (tok == end)
         break;
       fprintf(out, "%3u", lookuptable[res]);
+      // find next token
       tok = strtok(NULL, sep);
       if (tok != NULL) fprintf(out, ",");
     }
