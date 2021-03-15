@@ -60,6 +60,18 @@ int main(int argc, char const *argv[])
     exit(EXIT_SUCCESS);
   }
 
+  if (argc > 3)
+    fprintf(stderr, "Ignoring %d extra argument(s)\n", argc - 3);
+
+  const char *output = argv[2];
+  printf("Writing to: %s\n", output);
+  out = fopen(output, "w");
+  if (out == NULL)
+  {
+    fprintf(stderr, "%sError:%s Could not open output file: %s (%s)\n", BOLD, NORM, output, strerror(errno));
+    exit(EXIT_FAILURE);
+  }
+
   const char *filename = argv[1];
   printf("Reading: %s\n", filename);
   FILE *file = fopen(filename, "rt");
@@ -67,20 +79,6 @@ int main(int argc, char const *argv[])
   {
     fprintf(stderr, "%sError:%s Could not open input file: %s (%s)\n", BOLD, NORM, filename, strerror(errno));
     exit(EXIT_FAILURE);
-  }
-
-  if (argc >= 3)
-  {
-    if (argc > 3) fprintf(stderr, "Ignoring %d extra arguments", argc - 3);
-    
-    const char *output = argv[2];
-    printf("Writing to: %s\n", output);
-    out = fopen(output, "w");
-    if (out == NULL)
-    {
-      fprintf(stderr, "%sError:%s Could not open output file: %s (%s)\n", BOLD, NORM, output, strerror(errno));
-      exit(EXIT_FAILURE);
-    }
   }
 
   char line[LEN];
@@ -101,7 +99,8 @@ int main(int argc, char const *argv[])
       fprintf(out, "%3u", lookuptable[res]);
       // find next token
       tok = strtok(NULL, sep);
-      if (tok != NULL) fprintf(out, ",");
+      if (tok != NULL)
+        fprintf(out, ",");
     }
     fprintf(out, "\n");
   }
